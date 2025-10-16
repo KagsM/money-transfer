@@ -33,36 +33,6 @@ jobs:
           npm install -g vercel
           vercel --token "${{ secrets.VERCEL_SECRET_TOKEN }}" --prod --confirm --yes
 
-      - name: Update GitHub Project Board Status
-        if: success()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OWNER: "KagsM"
-          PROJECT_NUMBER: "4"
-          STATUS_FIELD: "Status"
-          STATUS_VALUE: "In review"
-        run: |
-          echo "Installing gh projects extension..."
-          gh extension install github/gh-projects
-
-          echo "Fetching Project ID..."
-          PROJECT_ID=$(gh projects view $PROJECT_NUMBER --owner $OWNER --format json | jq -r '.id')
-
-          echo "Fetching Field ID for '$STATUS_FIELD'..."
-          FIELD_ID=$(gh projects fields $PROJECT_ID --format json | jq -r ".[] | select(.name==\"$STATUS_FIELD\") | .id")
-
-          echo "Fetching Option ID for '$STATUS_VALUE'..."
-          OPTION_ID=$(gh projects fields $PROJECT_ID --format json | jq -r ".[] | select(.name==\"$STATUS_FIELD\") | .options[] | select(.name==\"$STATUS_VALUE\") | .id")
-
-          echo "Fetching a project item..."
-          ITEM_ID=$(gh projects items $PROJECT_ID --limit 1 --format json | jq -r ".[0].id")
-
-          echo "Updating item field..."
-          gh projects item-update $ITEM_ID --field-id "$FIELD_ID" --single-select-option-id "$OPTION_ID"
-
-          echo "Successfully moved card to '$STATUS_VALUE'."
-
-
       - name: Notify Slack
         if: always()
         uses: slackapi/slack-github-action@v1.26.0
