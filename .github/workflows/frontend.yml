@@ -33,3 +33,34 @@ jobs:
           npm install -g vercel
           vercel --token "${{ secrets.VERCEL_SECRET_TOKEN }}" --prod --confirm --yes
 
+      - name: Update Project Board Status to "Deployed"
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          echo "Updating GitHub Project board status..."
+          gh project item-edit --id $(gh project item-list --project "4" --limit 1 --json id --jq '.[0].id') \
+            --field "Status" --value "Deployed"
+
+      - name: Notify Slack
+        if: always()
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "text": ":rocket: *Frontend CI/CD* - ${{ job.status }} for *${{ github.repository }}* on *${{ github.ref_name }}* by *${{ github.actor }}*"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} 
+
+      - name: Comment on PR with Deploy Status
+        if: always()
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            🚀 **Deployment Status:** ${{ job.status }}
+            🔗 Vercel URL: [View Deployment](https://vercel.com/dashboard)
+
+
+
