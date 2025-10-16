@@ -10,6 +10,17 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Update GitHub CLI
+        run: |
+          sudo apt-get install -y curl
+          type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+          sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          sudo apt update
+          sudo apt install gh -y
+          gh --version
+
       - uses: actions/checkout@v4
 
       - name: Use Node.js
@@ -37,27 +48,27 @@ jobs:
         if: success()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: "KagsM"
           PROJECT_NUMBER: "4"
-          STATUS_FIELD: "In review"
-          STATUS_VALUE: "Deployed"
+          STATUS_FIELD: "Status"
+          STATUS_VALUE: "In review"
         run: |
           echo "Fetching Project ID..."
-          PROJECT_ID=$(gh project view $PROJECT_NUMBER --json id -q .id)
+          PROJECT_ID=$(gh project view $PROJECT_NUMBER --owner $OWNER --json id -q .id)
 
           echo "Fetching Field ID for '$STATUS_FIELD'..."
-          FIELD_ID=$(gh project field-list $PROJECT_NUMBER --owner ${{ github.repository_owner }} --json name,id -q ".[] | select(.name==\"$STATUS_FIELD\") | .id")
+          FIELD_ID=$(gh project field-list $PROJECT_NUMBER --owner $OWNER --json name,id -q ".[] | select(.name==\"$STATUS_FIELD\") | .id")
 
           echo "Fetching Option ID for '$STATUS_VALUE'..."
-          OPTION_ID=$(gh project field-list $PROJECT_NUMBER --owner ${{ github.repository_owner }} --json name,options -q ".[] | select(.name==\"$STATUS_FIELD\") | .options[] | select(.name==\"$STATUS_VALUE\") | .id")
+          OPTION_ID=$(gh project field-list $PROJECT_NUMBER --owner $OWNER --json name,options -q ".[] | select(.name==\"$STATUS_FIELD\") | .options[] | select(.name==\"$STATUS_VALUE\") | .id")
 
-          echo "Fetching Item ID from PR/Issue..."
-          ITEM_ID=$(gh project item-list $PROJECT_NUMBER --owner ${{ github.repository_owner }} --limit 1 --json id -q ".[0].id")
+          echo "Fetching Project Item..."
+          ITEM_ID=$(gh project item-list $PROJECT_NUMBER --owner $OWNER --limit 1 --json id -q ".[0].id")
 
-          echo "Updating Project item..."
+          echo "Updating Item Field..."
           gh project item-edit --id "$ITEM_ID" --field-id "$FIELD_ID" --single-select-option-id "$OPTION_ID"
 
-          echo "✅ Project board updated successfully."
-
+          echo "✅ Successfully moved card to '$STATUS_VALUE'."
 
       - name: Notify Slack
         if: always()
