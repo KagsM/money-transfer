@@ -11,9 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install GitHub Projects (Next) CLI extension
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh extension install github/gh-projects
+          echo "Installing GitHub Projects extension..."
+          gh extension install github/gh-projects || echo "Extension already installed"
           gh project --version
+
 
       - name: Update GitHub Project Board Status
         if: success()
