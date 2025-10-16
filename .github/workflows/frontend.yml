@@ -10,49 +10,6 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Install GitHub Projects (Next) CLI extension
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "Installing GitHub Projects extension..."
-          gh extension install github/gh-projects || echo "Extension already installed"
-          echo "GitHub Projects extension ready."
-      - name: Install GitHub Projects (Next) CLI extension
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "Installing GitHub Projects extension..."
-          gh extension install github/gh-projects || echo "Extension already installed"
-          echo "GitHub Projects extension ready."
-
-
-      - name: Update GitHub Project Board Status
-        if: success()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OWNER: "KagsM"
-          PROJECT_NUMBER: "4"
-          STATUS_FIELD: "Status"
-          STATUS_VALUE: "In review"
-        run: |
-          echo "Fetching Project ID..."
-          PROJECT_ID=$(gh project view $PROJECT_NUMBER --owner $OWNER --format=json | jq -r '.id')
-
-          echo "Fetching Field ID for '$STATUS_FIELD'..."
-          FIELD_ID=$(gh project field-list $PROJECT_NUMBER --owner $OWNER --format=json | jq -r ".[] | select(.name==\"$STATUS_FIELD\") | .id")
-
-          echo "Fetching Option ID for '$STATUS_VALUE'..."
-          OPTION_ID=$(gh project field-list $PROJECT_NUMBER --owner $OWNER --format=json | jq -r ".[] | select(.name==\"$STATUS_FIELD\") | .options[] | select(.name==\"$STATUS_VALUE\") | .id")
-
-          echo "Fetching Project Item..."
-          ITEM_ID=$(gh project item-list $PROJECT_NUMBER --owner $OWNER --format=json | jq -r ".[0].id")
-
-          echo "Updating Item Field..."
-          gh project item-edit --id "$ITEM_ID" --field-id "$FIELD_ID" --single-select-option-id "$OPTION_ID"
-
-          echo "Successfully moved card to '$STATUS_VALUE'."
-
-
       - uses: actions/checkout@v4
 
       - name: Use Node.js
