@@ -33,15 +33,31 @@ jobs:
           npm install -g vercel
           vercel --token "${{ secrets.VERCEL_SECRET_TOKEN }}" --prod --confirm --yes
 
-      - name: Update Project Board Status to "Deployed"
+      - name: Update GitHub Project Board Status
         if: success()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE_NUMBER: ${{ github.event.pull_request.number }}
+          PROJECT_NUMBER: "4"
+          STATUS_FIELD: "In review"
+          STATUS_VALUE: "Deployed"
         run: |
-          echo "Updating GitHub Project board status..."
-          gh project item-edit --id $(gh project item-list --project "4" --limit 1 --json id --jq '.[0].id') \
-            --field "Status" --value "Deployed"
+          echo "Fetching Project ID..."
+          PROJECT_ID=$(gh project view $PROJECT_NUMBER --json id -q .id)
+
+          echo "Fetching Field ID for '$STATUS_FIELD'..."
+          FIELD_ID=$(gh project field-list $PROJECT_NUMBER --owner ${{ github.repository_owner }} --json name,id -q ".[] | select(.name==\"$STATUS_FIELD\") | .id")
+
+          echo "Fetching Option ID for '$STATUS_VALUE'..."
+          OPTION_ID=$(gh project field-list $PROJECT_NUMBER --owner ${{ github.repository_owner }} --json name,options -q ".[] | select(.name==\"$STATUS_FIELD\") | .options[] | select(.name==\"$STATUS_VALUE\") | .id")
+
+          echo "Fetching Item ID from PR/Issue..."
+          ITEM_ID=$(gh project item-list $PROJECT_NUMBER --owner ${{ github.repository_owner }} --limit 1 --json id -q ".[0].id")
+
+          echo "Updating Project item..."
+          gh project item-edit --id "$ITEM_ID" --field-id "$FIELD_ID" --single-select-option-id "$OPTION_ID"
+
+          echo "✅ Project board updated successfully."
+
 
       - name: Notify Slack
         if: always()
