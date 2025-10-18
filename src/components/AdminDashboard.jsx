@@ -1,5 +1,5 @@
-import Navbar from "../components/Navbar";
-import Stats from "../components/Stats";
+import Navbar from "./Navbar";
+import Stats from "./Stats";
 
 function AdminDashboard(){
     return(
