@@ -15,9 +15,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/loggedout" element={<Logout />} />
-          <Route path="/admin/dashboard/overview" element={<AdminOverview />} />
+          <Route path="/admin/dashboard" element={<AdminOverview />} />
           <Route path="/admin/dashboard/transactions" element={<AdminTransactions />} />
           <Route path="/admin/dashboard/users" element={<AdminUsers />} />
           <Route path="/admin/dashboard/wallets" element={<AdminWallets />} />

@@ -36,7 +36,7 @@ function Navbar() {
         {/* Desktop Navigation Links */}
         <div className={`navbar-links ${isMenuOpen ? 'active' : ''}`}>
           
-          <a href="/admin/dashboard/overview" className="nav-link" title="Overview">
+          <a href="/admin/dashboard" className="nav-link" title="Overview">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M21 12H3M21 12l-4-4M21 12l-4 4" />
             </svg>
