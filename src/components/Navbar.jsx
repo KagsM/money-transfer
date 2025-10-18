@@ -57,19 +57,19 @@ function Navbar() {
 
         {/* Desktop Navigation Links */}
         <div className={`navbar-links ${isMenuOpen ? 'active' : ''}`}>
-          <a href="#transfer" className="nav-link" title="Overview">
+          <a href="/admin/dashboard" className="nav-link" title="Overview">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M21 12H3M21 12l-4-4M21 12l-4 4" />
             </svg>
             <span>Overview</span>
           </a>
-          <a href="#transactions" className="nav-link" title="Transactions">
+          <a href="/admin/dashboard/transactions" className="nav-link" title="Transactions">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M3 3h18v18H3zM3 9h18M9 21V9" />
             </svg>
             <span>Transactions</span>
           </a>
-          <a href="#recipients" className="nav-link" title="Users">
+          <a href="/admin/dashboard/users" className="nav-link" title="Users">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
               <circle cx="9" cy="7" r="4" />
@@ -77,7 +77,7 @@ function Navbar() {
             </svg>
             <span>Users</span>
           </a>
-          <a href="#support" className="nav-link" title="Wallets">
+          <a href="/admin/dashboard/wallets" className="nav-link" title="Wallets">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <circle cx="12" cy="12" r="10" />
               <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" />
