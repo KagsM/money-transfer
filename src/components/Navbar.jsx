@@ -35,48 +35,40 @@ function Navbar() {
 
         {/* Desktop Navigation Links */}
         <div className={`navbar-links ${isMenuOpen ? 'active' : ''}`}>
-          <a href="#dashboard" className="nav-link active">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <rect x="3" y="3" width="7" height="7" />
-              <rect x="14" y="3" width="7" height="7" />
-              <rect x="14" y="14" width="7" height="7" />
-              <rect x="3" y="14" width="7" height="7" />
-            </svg>
-            <span>Dashboard</span>
-          </a>
-          <a href="#transfer" className="nav-link">
+          
+          <a href="#transfer" className="nav-link" title="Overview">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M21 12H3M21 12l-4-4M21 12l-4 4" />
             </svg>
-            <span>Transfer</span>
+            <span>Overview</span>
           </a>
-          <a href="#transactions" className="nav-link">
+          <a href="#transactions" className="nav-link" title="Transactions">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M3 3h18v18H3zM3 9h18M9 21V9" />
             </svg>
             <span>Transactions</span>
           </a>
-          <a href="#recipients" className="nav-link">
+          <a href="#recipients" className="nav-link" title="Users">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
               <circle cx="9" cy="7" r="4" />
               <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
-            <span>Recipients</span>
+            <span>Users</span>
           </a>
-          <a href="#support" className="nav-link">
+          <a href="#support" className="nav-link" title="Wallets">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <circle cx="12" cy="12" r="10" />
               <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" />
             </svg>
-            <span>Support</span>
+            <span>Wallets</span>
           </a>
         </div>
 
         {/* Right Side Actions */}
         <div className="navbar-actions">
           {/* Notifications */}
-          <button className="icon-button" aria-label="Notifications">
+          <button className="icon-button" aria-label="Notifications" title="Notifications">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" />
             </svg>
@@ -121,11 +113,11 @@ function Navbar() {
                   <span>Settings</span>
                 </a>
                 <div className="dropdown-divider"></div>
-                <a href="#logout" className="dropdown-item logout">
+                <a href="/loggedout" className="dropdown-item logout">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
                   </svg>
-                  <span onClick={handleLogout}>Logout</span>
+                  <span>Logout</span>
                 </a>
               </div>
             )}
