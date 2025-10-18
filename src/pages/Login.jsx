@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -9,7 +10,9 @@ function Login() {
     e.preventDefault();
     console.log('Login attempt:', { email, password, rememberMe });
     // Add your login logic here
+    navigate('/admin/dashboard');
   };
+  const navigate = useNavigate();
 
   return (
     <div className="login-container">

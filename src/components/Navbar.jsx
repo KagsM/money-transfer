@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,6 +11,13 @@ function Navbar() {
 
   const toggleProfile = () => {
     setIsProfileOpen(!isProfileOpen);
+  };
+
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    // Navigate back to dashboard or previous page
+    console.log('to logout');
+    navigate('/loggedout');
   };
 
   return (
@@ -117,7 +125,7 @@ function Navbar() {
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
                   </svg>
-                  <span>Logout</span>
+                  <span onClick={handleLogout}>Logout</span>
                 </a>
               </div>
             )}
