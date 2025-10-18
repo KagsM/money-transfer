@@ -1,4 +1,5 @@
 import AdminDashboard from "./AdminDashboard";
+import Foot from "./Footer";
 
 const AdminUsers = () => {
   const users = [
@@ -177,6 +178,7 @@ const AdminUsers = () => {
         </div>
       </div>
     </div>
+    <Foot/>
     </>
   );
 };

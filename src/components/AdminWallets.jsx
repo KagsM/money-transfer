@@ -1,4 +1,5 @@
 import AdminDashboard from "./AdminDashboard";
+import Foot from "./Footer";
 
 const AdminWallets = () => {
   const wallets = [
@@ -141,6 +142,7 @@ const AdminWallets = () => {
         </div>
       </div>
     </div>
+    <Foot/>
     </>
   );
 };

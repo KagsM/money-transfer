@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import Foot from '../components/Footer';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -15,6 +16,7 @@ function Login() {
   const navigate = useNavigate();
 
   return (
+    <>
     <div className="login-container">
       <div className="login-card">
         <div className="login-header">
@@ -96,6 +98,8 @@ function Login() {
         </div>
       </div>
     </div>
+    <Foot/>
+    </>
   );
 }
 

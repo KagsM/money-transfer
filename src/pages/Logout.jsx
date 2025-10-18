@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Foot from '../components/Footer';
 
 function Logout() {
   const [isLoggingOut, setIsLoggingOut] = useState(true);
@@ -46,6 +47,7 @@ function Logout() {
   }
 
   return (
+    <>
     <div className="logout-container">
       <div className="logout-card">
         <div className="logout-icon-success">
@@ -97,6 +99,8 @@ function Logout() {
         </div>
       </div>
     </div>
+    <Foot/>
+    </>
   );
 }
 

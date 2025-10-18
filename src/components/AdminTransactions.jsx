@@ -1,4 +1,5 @@
 import AdminDashboard from "./AdminDashboard";
+import Foot from "./Footer";
 
 const AdminTransactions = () => {
   const transactions = [
@@ -196,6 +197,7 @@ const AdminTransactions = () => {
         ))}
       </div>
     </div>
+    <Foot/>
     </>
   );
 };

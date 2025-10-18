@@ -1,4 +1,5 @@
 import AdminDashboard from "./AdminDashboard";
+import Foot from "./Footer";
 
 const AdminOverview = () => {
   return (
@@ -69,6 +70,7 @@ const AdminOverview = () => {
         </div>
       </div>
     </div>
+    <Foot/>
     </>
   );
 };
