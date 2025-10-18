@@ -1,9 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Check for saved theme preference on mount
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      setIsDarkMode(true);
+      document.documentElement.classList.add('dark-mode');
+    }
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -13,9 +23,21 @@ function Navbar() {
     setIsProfileOpen(!isProfileOpen);
   };
 
+  const toggleDarkMode = () => {
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    
+    if (newMode) {
+      document.documentElement.classList.add('dark-mode');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark-mode');
+      localStorage.setItem('theme', 'light');
+    }
+  };
+
   const navigate = useNavigate();
   const handleLogout = () => {
-    // Navigate back to dashboard or previous page
     console.log('to logout');
     navigate('/loggedout');
   };
@@ -35,20 +57,19 @@ function Navbar() {
 
         {/* Desktop Navigation Links */}
         <div className={`navbar-links ${isMenuOpen ? 'active' : ''}`}>
-          
-          <a href="/admin/dashboard" className="nav-link" title="Overview">
+          <a href="#transfer" className="nav-link" title="Overview">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M21 12H3M21 12l-4-4M21 12l-4 4" />
             </svg>
             <span>Overview</span>
           </a>
-          <a href="/admin/dashboard/transactions" className="nav-link" title="Transactions">
+          <a href="#transactions" className="nav-link" title="Transactions">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M3 3h18v18H3zM3 9h18M9 21V9" />
             </svg>
             <span>Transactions</span>
           </a>
-          <a href="/admin/dashboard/users" className="nav-link" title="Users">
+          <a href="#recipients" className="nav-link" title="Users">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
               <circle cx="9" cy="7" r="4" />
@@ -56,7 +77,7 @@ function Navbar() {
             </svg>
             <span>Users</span>
           </a>
-          <a href="/admin/dashboard/wallets" className="nav-link" title="Wallets">
+          <a href="#support" className="nav-link" title="Wallets">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <circle cx="12" cy="12" r="10" />
               <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" />
@@ -67,6 +88,32 @@ function Navbar() {
 
         {/* Right Side Actions */}
         <div className="navbar-actions">
+          {/* Dark Mode Toggle */}
+          <button 
+            className="icon-button dark-mode-toggle" 
+            onClick={toggleDarkMode}
+            aria-label="Toggle Dark Mode"
+            title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          >
+            {isDarkMode ? (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            )}
+          </button>
+
           {/* Notifications */}
           <button className="icon-button" aria-label="Notifications" title="Notifications">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">

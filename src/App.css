@@ -3001,3 +3001,288 @@ button {
   content: '';
   margin-right: 0;
 }
+/* Dark Mode Styles */
+
+/* Root variables for easy theming */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7fafc;
+  --bg-tertiary: #e2e8f0;
+  --text-primary: #1a202c;
+  --text-secondary: #4a5568;
+  --text-tertiary: #718096;
+  --border-color: #e2e8f0;
+  --shadow: rgba(0, 0, 0, 0.06);
+  --shadow-hover: rgba(0, 0, 0, 0.12);
+}
+
+.dark-mode {
+  --bg-primary: #1a202c;
+  --bg-secondary: #2d3748;
+  --bg-tertiary: #4a5568;
+  --text-primary: #f7fafc;
+  --text-secondary: #e2e8f0;
+  --text-tertiary: #cbd5e0;
+  --border-color: #4a5568;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --shadow-hover: rgba(0, 0, 0, 0.5);
+}
+
+/* Global dark mode transitions */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Dark mode body */
+.dark-mode body {
+  background: #1a202c;
+  color: #f7fafc;
+}
+
+/* Dark Mode Toggle Button */
+.dark-mode-toggle {
+  position: relative;
+  overflow: hidden;
+}
+
+.dark-mode-toggle svg {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.dark-mode-toggle:hover svg {
+  transform: rotate(20deg) scale(1.1);
+}
+
+/* Navbar Dark Mode */
+.dark-mode .navbar {
+  background: #1a202c;
+  border-bottom: 1px solid #4a5568;
+}
+
+.dark-mode .logo-text {
+  color: #f7fafc;
+}
+
+.dark-mode .nav-link {
+  color: #cbd5e0;
+}
+
+.dark-mode .nav-link:hover {
+  background: #2d3748;
+  color: #667eea;
+}
+
+.dark-mode .icon-button {
+  background: #2d3748;
+  color: #cbd5e0;
+}
+
+.dark-mode .icon-button svg {
+  color: #cbd5e0;
+}
+
+.dark-mode .icon-button:hover {
+  background: #4a5568;
+}
+
+.dark-mode .profile-button {
+  background: #2d3748;
+}
+
+.dark-mode .profile-button:hover {
+  background: #4a5568;
+}
+
+.dark-mode .chevron-icon {
+  color: #cbd5e0;
+}
+
+.dark-mode .mobile-menu-toggle {
+  background: #2d3748;
+}
+
+.dark-mode .mobile-menu-toggle svg {
+  color: #cbd5e0;
+}
+
+.dark-mode .mobile-menu-toggle:hover {
+  background: #4a5568;
+}
+
+/* Dropdown Dark Mode */
+.dark-mode .dropdown-menu {
+  background: #2d3748;
+  border: 1px solid #4a5568;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode .dropdown-header {
+  background: #1a202c;
+}
+
+.dark-mode .profile-name {
+  color: #f7fafc;
+}
+
+.dark-mode .profile-email {
+  color: #a0aec0;
+}
+
+.dark-mode .dropdown-divider {
+  background: #4a5568;
+}
+
+.dark-mode .dropdown-item {
+  color: #cbd5e0;
+}
+
+.dark-mode .dropdown-item:hover {
+  background: #1a202c;
+  color: #667eea;
+}
+
+.dark-mode .dropdown-item.logout:hover {
+  background: #742a2a;
+  color: #fc8181;
+}
+
+/* Stats Cards Dark Mode */
+.dark-mode .stat-card {
+  background: #2d3748;
+  border: 1px solid #4a5568;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .stat-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  border-color: #718096;
+}
+
+.dark-mode .stat-title {
+  color: #a0aec0;
+}
+
+.dark-mode .stat-value {
+  color: #f7fafc;
+}
+
+/* Mobile menu dark mode */
+@media (max-width: 768px) {
+  .dark-mode .navbar-links {
+    background: #1a202c;
+    border-bottom: 1px solid #4a5568;
+  }
+}
+
+/* Login Page Dark Mode (Optional) */
+.dark-mode .login-card {
+  background: #2d3748;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.dark-mode .login-header h1 {
+  color: #f7fafc;
+}
+
+.dark-mode .login-header p {
+  color: #a0aec0;
+}
+
+.dark-mode .form-group label {
+  color: #e2e8f0;
+}
+
+.dark-mode .input-wrapper input {
+  background: #1a202c;
+  border-color: #4a5568;
+  color: #f7fafc;
+}
+
+.dark-mode .input-wrapper input:focus {
+  background: #2d3748;
+  border-color: #667eea;
+}
+
+.dark-mode .input-icon {
+  color: #718096;
+}
+
+.dark-mode .checkbox-label span {
+  color: #cbd5e0;
+}
+
+.dark-mode .forgot-link {
+  color: #667eea;
+}
+
+.dark-mode .login-footer p {
+  color: #a0aec0;
+}
+
+.dark-mode .security-badge {
+  background: #1a202c;
+}
+
+.dark-mode .security-badge span {
+  color: #cbd5e0;
+}
+
+/* Logout Page Dark Mode */
+.dark-mode .logout-card {
+  background: #2d3748;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.dark-mode .logout-card h1,
+.dark-mode .logout-card h2 {
+  color: #f7fafc;
+}
+
+.dark-mode .logout-message,
+.dark-mode .logout-card.logging-out p {
+  color: #a0aec0;
+}
+
+.dark-mode .logout-info-box {
+  background: #1a202c;
+  border: 1px solid #4a5568;
+}
+
+.dark-mode .logout-info-box h3 {
+  color: #f7fafc;
+}
+
+.dark-mode .logout-info-box p {
+  color: #a0aec0;
+}
+
+.dark-mode .btn-secondary {
+  background: #1a202c;
+  color: #cbd5e0;
+  border-color: #4a5568;
+}
+
+.dark-mode .btn-secondary:hover {
+  background: #2d3748;
+  border-color: #718096;
+}
+
+.dark-mode .logout-footer {
+  border-top: 1px solid #4a5568;
+}
+
+.dark-mode .footer-text {
+  color: #718096;
+}
+
+/* General card/container dark mode */
+.dark-mode .card,
+.dark-mode .container {
+  background: #2d3748;
+  border-color: #4a5568;
+}
+
+/* Smooth transition for theme toggle */
+.dark-mode * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
