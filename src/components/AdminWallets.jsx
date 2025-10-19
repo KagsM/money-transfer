@@ -142,7 +142,6 @@ const AdminWallets = () => {
         </div>
       </div>
     </div>
-    <Foot/>
     </>
   );
 };

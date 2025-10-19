@@ -197,7 +197,6 @@ const AdminTransactions = () => {
         ))}
       </div>
     </div>
-    <Foot/>
     </>
   );
 };

@@ -70,7 +70,6 @@ const AdminOverview = () => {
         </div>
       </div>
     </div>
-    <Foot/>
     </>
   );
 };

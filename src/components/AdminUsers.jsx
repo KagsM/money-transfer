@@ -178,7 +178,6 @@ const AdminUsers = () => {
         </div>
       </div>
     </div>
-    <Foot/>
     </>
   );
 };
