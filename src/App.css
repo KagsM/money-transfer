@@ -3781,3 +3781,22 @@ button {
     font-size: 18px;
   }
 }
+/* Dropdown Dark Mode Toggle Button */
+.dropdown-dark-mode {
+  width: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.dropdown-dark-mode:hover {
+  background: #f7fafc;
+  color: #667eea;
+}
+
+/* Dark Mode Override for Dropdown Toggle */
+.dark-mode .dropdown-dark-mode:hover {
+  background: #1a202c;
+  color: #667eea;
+}

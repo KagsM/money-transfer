@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import Navbar from '../components/Navbar';
 
-export default function Profile() {
+function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
     firstName: 'John',
@@ -41,6 +42,8 @@ export default function Profile() {
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="profile-page">
       <div className="profile-container">
         {/* Header */}
@@ -258,5 +261,8 @@ export default function Profile() {
         </div>
       </div>
     </div>
+    </>
   );
 }
+
+export default Profile;
