@@ -52,7 +52,7 @@ function Navbar() {
               <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
             </svg>
           </div>
-          <span className="logo-text">F-Pesa</span>
+          <span className="logo-text">F-Pass</span>
         </div>
 
         {/* Desktop Navigation Links */}
@@ -119,6 +119,7 @@ function Navbar() {
                     <p className="profile-email">john.doe@email.com</p>
                   </div>
                 </div>
+                <div className="dropdown-divider"></div>
                 <a href="/admin/profile" className="dropdown-item">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -126,6 +127,7 @@ function Navbar() {
                   </svg>
                   <span>My Profile</span>
                 </a>
+                <div className="dropdown-divider"></div>
                 {/* Dark Mode Toggle in Dropdown */}
                 <button className="dropdown-item dropdown-dark-mode" onClick={toggleDarkMode}>
                   {isDarkMode ? (
