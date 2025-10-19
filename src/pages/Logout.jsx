@@ -99,7 +99,6 @@ function Logout() {
         </div>
       </div>
     </div>
-    <Foot/>
     </>
   );
 }

@@ -152,13 +152,6 @@ function Navbar() {
                   </svg>
                   <span>My Profile</span>
                 </a>
-                <a href="#settings" className="dropdown-item">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <circle cx="12" cy="12" r="3" />
-                    <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24" />
-                  </svg>
-                  <span>Settings</span>
-                </a>
                 <div className="dropdown-divider"></div>
                 <a href="/loggedout" className="dropdown-item logout">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
