@@ -1,42 +1,225 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* Global styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden; /* prevent scrolling */
+  font-family: "Inter", sans-serif;
+}
+
+/* Container setup */
+.login-container {
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(180deg, #1455f5, #1e47d5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Header (Logo + Title) */
+.login-header {
+  text-align: center;
+  margin-bottom: 20px;
+  animation: fadeDown 0.9s ease-out;
+}
+
+.logo-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.wallet-icon {
+  font-size: 30px;
+  color: #1455f5;
+}
+
+.login-header h2 {
+  font-size: 26px;
+  margin: 5px 0;
+}
+
+.login-header p {
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+/* Card */
+.login-card {
+  background: #fff;
+  color: #111;
+  padding: 40px 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 380px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  text-align: left;
+  animation: fadeUp 1s ease-in-out;
+}
+
+/* Input group */
+.input-group {
+  display: flex;
+  align-items: center;
+  background: #f5f5f7;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  padding: 10px;
+}
+
+.input-group .icon {
+  margin-right: 10px;
+  font-size: 18px;
+  color: #888;
+}
+
+.input-group input {
+  border: none;
+  background: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Forgot password */
+.forgot-link {
+  font-size: 13px;
+  color: #1455f5;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* Button */
+.sign-in-btn {
+  width: 100%;
+  padding: 12px;
+  background: #1455f5;
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(20, 85, 245, 0.3);
+}
+
+.sign-in-btn:hover {
+  background: #0d3fd1;
+  box-shadow: 0 6px 16px rgba(20, 85, 245, 0.5);
+}
+
+/* Signup text */
+.signup-text {
+  margin-top: 20px;
+  font-size: 14px;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.signup-text a {
+  color: #1455f5;
+  text-decoration: none;
+  font-weight: 500;
 }
 
-@keyframes logo-spin {
+.signup-text a:hover {
+  text-decoration: underline;
+}
+
+/* Footer section */
+.footer {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  position: absolute;
+  bottom: 20px;
+  color: #fff;
+  flex-wrap: wrap;
+  text-align: center;
+  width: 100%;
+}
+
+.footer h4 {
+  margin-bottom: 5px;
+  font-size: 15px;
+}
+
+.footer p {
+  font-size: 13px;
+  color: #dce4ff;
+}
+
+/* Animations */
+@keyframes fadeUp {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: translateY(40px);
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.card {
-  padding: 2em;
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
-.read-the-docs {
-  color: #888;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .login-card {
+    padding: 30px 20px;
+  }
+
+  .login-header h2 {
+    font-size: 22px;
+  }
+
+  .footer {
+    gap: 30px;
+    bottom: 15px;
+  }
+}
+
+@media (max-height: 600px) {
+  .footer {
+    display: none; /* hide footer if screen too short */
+  }
 }
