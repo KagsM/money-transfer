@@ -1,5 +1,4 @@
 import AdminDashboard from "./AdminDashboard";
-import Foot from "./Footer";
 
 const AdminWallets = () => {
   const wallets = [
