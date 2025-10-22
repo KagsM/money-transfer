@@ -962,22 +962,6 @@ button {
   margin: 0;
 }
 
-.btn-edit {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  color: white;
-  border: none;
-  border-radius: var(--radius-md);
-  font-size: 0.9375rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-}
-
 .btn-edit:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
@@ -3080,7 +3064,7 @@ button {
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #375bfc 0%, #764ba2 100%);
   color: white;
   border: none;
   border-radius: 12px;
@@ -3097,10 +3081,6 @@ button {
   stroke-width: 2;
 }
 
-.btn-edit:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
-}
 
 /* Profile Content */
 .profile-content {
@@ -3111,15 +3091,6 @@ button {
 }
 
 /* Avatar Section */
-.profile-avatar-section {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  padding: 40px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  position: relative;
-}
-
 .profile-avatar-section::before {
   content: '';
   position: absolute;
@@ -3359,12 +3330,6 @@ button {
   background: #f7fafc;
   border-color: #cbd5e0;
   color: #4a5568;
-}
-
-.btn-save {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 .btn-save:hover {
