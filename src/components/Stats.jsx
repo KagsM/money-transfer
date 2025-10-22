@@ -42,11 +42,6 @@ const Stats = () => {
               {stat.change}
             </div>
           </div>
-          <div className="stat-decoration">
-            <div className="stat-orb">
-              <span className="stat-icon">{stat.icon}</span>
-            </div>
-          </div>
         </div>
       ))}
     </div>
