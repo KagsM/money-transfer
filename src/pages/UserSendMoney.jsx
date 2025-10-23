@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { FaSearch, FaPaperPlane, FaTimes } from "react-icons/fa";
+import { FaSearch, FaPaperPlane, FaTimes, FaCheckCircle, FaArrowLeft } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-const UserSendMoney = () => {
+const SendMoney = () => {
   const [search, setSearch] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
   const [amount, setAmount] = useState("");
@@ -11,6 +12,7 @@ const UserSendMoney = () => {
   const [confirming, setConfirming] = useState(false);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
+  const navigate = useNavigate();
 
   const presetAmounts = [10, 25, 50, 100, 250, 500];
   const transactionChargeRate = 0.015; // 1.5%
@@ -40,21 +42,27 @@ const UserSendMoney = () => {
   const confirmSend = () => setConfirming(true);
 
   const finalizeSend = () => {
-    if (!amount) return;
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setConfirming(false);
-      setShowModal(false);
-      setToast({
-        type: "success",
-        message: `Sent $${amount} to ${selectedUser?.name}${note ? ` (${note})` : ""}`,
-      });
-      setAmount("");
-      setNote("");
-      setSelectedUser(null);
-    }, 1200);
-  };
+  if (!amount) return;
+  setLoading(true);
+  setTimeout(() => {
+    setLoading(false);
+    setConfirming(false);
+    setShowModal(false);
+    setToast({
+      type: "success",
+      message: (
+        <>
+          <FaCheckCircle size={20} color="white" style={{ marginRight: "8px" }} />
+          Sent ${amount} to {selectedUser?.name}
+          {note && ` (${note})`}
+        </>
+      ),
+    });
+    setAmount("");
+    setNote("");
+    setSelectedUser(null);
+  }, 1200);
+};
 
   useEffect(() => {
     if (toast) {
@@ -74,11 +82,9 @@ const UserSendMoney = () => {
       paddingBottom: "40px",
       gap: "25px",
     },
-    stickyHeader: {
-      position: "sticky",
-      top: 0,
+    header: {
       width: "100%",
-      background: "#1e3a8a",
+      background: "#2563eb",
       color: "#fff",
       padding: "30px 0 20px 0",
       textAlign: "left",
@@ -291,26 +297,76 @@ const UserSendMoney = () => {
       transition: "all 0.3s ease",
     },
     toast: {
-      position: "fixed",
-      top: "20px",
-      right: "20px",
-      background: "#2563eb",
-      color: "white",
-      padding: "14px 20px",
-      borderRadius: "10px",
-      boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-      animation: "fadeInOut 3.5s ease",
-      zIndex: 200,
-      fontWeight: 500,
+    position: "fixed",
+    bottom: "25px",
+    right: "25px",
+    background: "#2563eb",
+    color: "white",
+    padding: "14px 20px",
+    borderRadius: "12px",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
+    display: "flex",
+    alignItems: "center",
+    animation: "slideInRight 0.4s ease, fadeOut 0.5s ease 3s forwards",
+    zIndex: 200,
+    fontWeight: 500,
+    },
+    headerTitleWrapper: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    },
+
+    backBtn: {
+    background: "rgba(255,255,255,0.15)",
+    border: "none",
+    borderRadius: "8px",
+    padding: "8px 10px",
+    cursor: "pointer",
+    transition: "all 0.25s ease",
+    },
+    backBtnHover: {
+    background: "rgba(255,255,255,0.25)",
+    transform: "translateX(-2px)",
     },
   };
 
+  const styleSheet = document.styleSheets[0];
+if (styleSheet) {
+  const slideIn = `
+    @keyframes slideInRight {
+      0% { transform: translateX(100%); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+  `;
+  const fadeOut = `
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(20px); }
+    }
+  `;
+  if (![...styleSheet.cssRules].some(r => r.name === "slideInRight")) {
+    styleSheet.insertRule(slideIn, styleSheet.cssRules.length);
+    styleSheet.insertRule(fadeOut, styleSheet.cssRules.length);
+  }
+}
+
   return (
     <div style={styles.container}>
-      <div style={styles.stickyHeader}>
+      <div style={styles.header}>
         <div style={styles.headerContent}>
           <div style={styles.headerTop}>
-            <h2 style={styles.headerTitle}>Send Money</h2>
+            <div style={styles.headerTitleWrapper}>
+                <button
+                style={styles.backBtn}
+                onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.backBtnHover)}
+                onMouseLeave={(e) => Object.assign(e.currentTarget.style, styles.backBtn)}
+                onClick={() => navigate(-1)}
+                >
+                <FaArrowLeft size={16} color="white" />
+                </button>
+                <h2 style={styles.headerTitle}>Send Money</h2>
+            </div>
             <div style={styles.searchBar}>
               <FaSearch style={styles.searchIcon} />
               <input
@@ -443,4 +499,4 @@ const UserSendMoney = () => {
   );
 };
 
-export default UserSendMoney;
+export default SendMoney;

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { FaCreditCard, FaUniversity, FaMobileAlt, FaCheckCircle } from "react-icons/fa";
+import { FaCreditCard, FaUniversity, FaMobileAlt, FaCheckCircle, FaArrowLeft } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-const UserAddFunds = () => {
+const AddFunds = () => {
   const [amount, setAmount] = useState("");
   const [method, setMethod] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -9,6 +10,7 @@ const UserAddFunds = () => {
   const [hoveredMethod, setHoveredMethod] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const navigate = useNavigate();
 
   const presetAmounts = [10, 25, 50, 100, 250, 500];
 
@@ -46,7 +48,7 @@ const UserAddFunds = () => {
 
   useEffect(() => {
     if (showToast) {
-      const timer = setTimeout(() => setShowToast(false), 3000);
+      const timer = setTimeout(() => setShowToast(false), 3500);
       return () => clearTimeout(timer);
     }
   }, [showToast]);
@@ -68,11 +70,9 @@ const UserAddFunds = () => {
       gap: "25px",
       position: "relative",
     },
-    stickyHeader: {
-      position: "sticky",
-      top: 0,
+    header: {
       width: "100%",
-      background: "#1e3a8a",
+      background: "#2563eb",
       color: "#fff",
       padding: "30px 0 20px 0",
       textAlign: "left",
@@ -294,7 +294,7 @@ const UserAddFunds = () => {
       cursor: "pointer",
       transition: "all 0.3s ease",
     },
-    toast: {
+      toast: {
       position: "fixed",
       bottom: "20px",
       right: "20px",
@@ -306,17 +306,64 @@ const UserAddFunds = () => {
       alignItems: "center",
       gap: "10px",
       boxShadow: "0 4px 16px rgba(0,0,0,0.25)",
-      animation: "fadeInUp 0.4s ease",
+      animation: "fadeInOut 3s ease forwards",
       zIndex: 200,
     },
+    headerTitleWrapper: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    },
+
+    backBtn: {
+    background: "rgba(255,255,255,0.15)",
+    border: "none",
+    borderRadius: "8px",
+    padding: "8px 10px",
+    cursor: "pointer",
+    transition: "all 0.25s ease",
+    },
+    backBtnHover: {
+    background: "rgba(255,255,255,0.25)",
+    transform: "translateX(-2px)",
+    },
   };
+
+const styleSheet = document.styleSheets[0] || (() => {
+  const style = document.createElement("style");
+  document.head.appendChild(style);
+  return style.sheet;
+})();
+
+const fadeInOut = `
+  @keyframes fadeInOut {
+    0% { opacity: 0; transform: translateX(30px); }
+    10% { opacity: 1; transform: translateX(0); }
+    80% { opacity: 1; transform: translateX(0); }
+    100% { opacity: 0; transform: translateY(20px); }
+  }
+`;
+
+if (![...styleSheet.cssRules].some(r => r.name === "fadeInOut")) {
+  styleSheet.insertRule(fadeInOut, styleSheet.cssRules.length);
+}
 
   return (
     <div style={styles.container}>
       {/* Header */}
-      <div style={styles.stickyHeader}>
+      <div style={styles.header}>
         <div style={styles.headerContent}>
-          <h2 style={styles.headerTitle}>Add Funds</h2>
+            <div style={styles.headerTitleWrapper}>
+                <button
+                style={styles.backBtn}
+                onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.backBtnHover)}
+                onMouseLeave={(e) => Object.assign(e.currentTarget.style, styles.backBtn)}
+                onClick={() => navigate(-1)}
+                >
+                <FaArrowLeft size={16} color="white" />
+                </button>
+                <h2 style={styles.headerTitle}>Add Funds</h2>
+            </div>
           <p style={styles.headerSubtext}>
             Select or enter the amount you want to add, then choose your payment method.
           </p>
@@ -437,4 +484,4 @@ const UserAddFunds = () => {
   );
 };
 
-export default UserAddFunds;
+export default AddFunds;
