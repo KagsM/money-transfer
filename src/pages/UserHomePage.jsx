@@ -70,13 +70,13 @@ function UserHomePage() {
               <h3 className="action-title">Send Money</h3>
               <p className="action-desc">View history</p>
             </Link>
-            <Link to="/user/contacts" className="quick-action-card">
-              <h3 className="action-title">Contacts</h3>
+            <Link to="/user/add-funds" className="quick-action-card">
+              <h3 className="action-title">Add Funds</h3>
               <p className="action-desc">Manage recipients</p>
             </Link>
-            <Link to="/user/profile" className="quick-action-card">
-              <h3 className="action-title">Settings</h3>
-              <p className="action-desc">Account settings</p>
+            <Link to="/user/contacts" className="quick-action-card">
+              <h3 className="action-title">Contacts</h3>
+              <p className="action-desc">Account Contacts</p>
             </Link>
           </div>
         </div>
@@ -92,7 +92,7 @@ function UserHomePage() {
             {recentTransactions.map(transaction => (
               <div key={transaction.id} className="transaction-item">
                 <div className="transaction-icon">
-                  {transaction.type === 'received' ? '📥' : '📤'}
+                  {transaction.type === 'received' ? '💲' : '📤'}
                 </div>
                 <div className="transaction-details">
                   <h4 className="transaction-name">
