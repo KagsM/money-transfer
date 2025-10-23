@@ -68,11 +68,11 @@ function UserHomePage() {
           <div className="actions-grid">
             <Link to="/user/send-money" className="quick-action-card">
               <h3 className="action-title">Send Money</h3>
-              <p className="action-desc">View history</p>
+              <p className="action-desc">Cash instantly</p>
             </Link>
             <Link to="/user/add-funds" className="quick-action-card">
               <h3 className="action-title">Add Funds</h3>
-              <p className="action-desc">Manage recipients</p>
+              <p className="action-desc">Add money to wallet</p>
             </Link>
             <Link to="/user/contacts" className="quick-action-card">
               <h3 className="action-title">Contacts</h3>

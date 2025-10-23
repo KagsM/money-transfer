@@ -10,6 +10,7 @@ import Profile from './pages/Profile';
 
 import UserHomePage from './pages/UserHomePage';
 import UserAddFunds from './pages/UserAddFunds';
+import UserSendMoney from './pages/UserSendMoney';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/admin/profile" element={<Profile />} />
           <Route path="/user/dashboard" element={<UserHomePage />} />
           <Route path="/user/add-funds" element={<UserAddFunds />} />
+          <Route path="/user/send-money" element={<UserSendMoney />} />
         </Routes>
       </Router>
     </>
