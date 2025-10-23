@@ -46,7 +46,7 @@ const AddFunds = () => {
 
   useEffect(() => {
     if (showToast) {
-      const timer = setTimeout(() => setShowToast(false), 3000);
+      const timer = setTimeout(() => setShowToast(false), 3500);
       return () => clearTimeout(timer);
     }
   }, [showToast]);
@@ -68,11 +68,9 @@ const AddFunds = () => {
       gap: "25px",
       position: "relative",
     },
-    stickyHeader: {
-      position: "sticky",
-      top: 0,
+    header: {
       width: "100%",
-      background: "#1e3a8a",
+      background: "#2563eb",
       color: "#fff",
       padding: "30px 0 20px 0",
       textAlign: "left",
@@ -294,7 +292,7 @@ const AddFunds = () => {
       cursor: "pointer",
       transition: "all 0.3s ease",
     },
-    toast: {
+      toast: {
       position: "fixed",
       bottom: "20px",
       right: "20px",
@@ -306,15 +304,34 @@ const AddFunds = () => {
       alignItems: "center",
       gap: "10px",
       boxShadow: "0 4px 16px rgba(0,0,0,0.25)",
-      animation: "fadeInUp 0.4s ease",
+      animation: "fadeInOut 3s ease forwards",
       zIndex: 200,
-    },
+},
   };
+
+const styleSheet = document.styleSheets[0] || (() => {
+  const style = document.createElement("style");
+  document.head.appendChild(style);
+  return style.sheet;
+})();
+
+const fadeInOut = `
+  @keyframes fadeInOut {
+    0% { opacity: 0; transform: translateX(30px); }
+    10% { opacity: 1; transform: translateX(0); }
+    80% { opacity: 1; transform: translateX(0); }
+    100% { opacity: 0; transform: translateY(20px); }
+  }
+`;
+
+if (![...styleSheet.cssRules].some(r => r.name === "fadeInOut")) {
+  styleSheet.insertRule(fadeInOut, styleSheet.cssRules.length);
+}
 
   return (
     <div style={styles.container}>
       {/* Header */}
-      <div style={styles.stickyHeader}>
+      <div style={styles.header}>
         <div style={styles.headerContent}>
           <h2 style={styles.headerTitle}>Add Funds</h2>
           <p style={styles.headerSubtext}>
