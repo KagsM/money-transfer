@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { FaCreditCard, FaUniversity, FaMobileAlt } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { FaCreditCard, FaUniversity, FaMobileAlt, FaCheckCircle } from "react-icons/fa";
 
 const AddFunds = () => {
   const [amount, setAmount] = useState("");
@@ -8,6 +8,7 @@ const AddFunds = () => {
   const [hoveredPreset, setHoveredPreset] = useState(null);
   const [hoveredMethod, setHoveredMethod] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const presetAmounts = [10, 25, 50, 100, 250, 500];
 
@@ -35,13 +36,20 @@ const AddFunds = () => {
   const confirmAddFunds = () => {
     setLoading(true);
     setTimeout(() => {
-      alert(`Successfully added $${amount} via ${method.name}.`);
-      setAmount("");
-      setMethod(null);
       setLoading(false);
       setShowModal(false);
+      setShowToast(true);
+      setAmount("");
+      setMethod(null);
     }, 1500);
   };
+
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => setShowToast(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
 
   const numericAmount = parseFloat(amount) || 0;
   const fee = method ? (numericAmount * method.fee) / 100 : 0;
@@ -58,6 +66,7 @@ const AddFunds = () => {
       fontFamily: "Inter, sans-serif",
       paddingBottom: "40px",
       gap: "25px",
+      position: "relative",
     },
     stickyHeader: {
       position: "sticky",
@@ -247,7 +256,6 @@ const AddFunds = () => {
       alignItems: "center",
       justifyContent: "center",
       zIndex: 100,
-      animation: "fadeIn 0.3s ease",
     },
     modal: {
       background: "white",
@@ -257,7 +265,6 @@ const AddFunds = () => {
       maxWidth: "380px",
       textAlign: "center",
       boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
-      animation: "scaleIn 0.3s ease",
     },
     modalButtons: {
       display: "flex",
@@ -287,11 +294,26 @@ const AddFunds = () => {
       cursor: "pointer",
       transition: "all 0.3s ease",
     },
+    toast: {
+      position: "fixed",
+      bottom: "20px",
+      right: "20px",
+      background: "#2563eb",
+      color: "#fff",
+      borderRadius: "10px",
+      padding: "16px 20px",
+      display: "flex",
+      alignItems: "center",
+      gap: "10px",
+      boxShadow: "0 4px 16px rgba(0,0,0,0.25)",
+      animation: "fadeInUp 0.4s ease",
+      zIndex: 200,
+    },
   };
 
   return (
     <div style={styles.container}>
-      {/* Sticky Blue Header */}
+      {/* Header */}
       <div style={styles.stickyHeader}>
         <div style={styles.headerContent}>
           <h2 style={styles.headerTitle}>Add Funds</h2>
@@ -329,7 +351,7 @@ const AddFunds = () => {
         </div>
       </div>
 
-      {/* Payment Methods */}
+      {/* Methods */}
       <div style={styles.methodsContainer}>
         {methods.map((m, i) => (
           <div
@@ -350,7 +372,7 @@ const AddFunds = () => {
         ))}
       </div>
 
-      {/* Total Summary */}
+      {/* Summary */}
       <div style={styles.totalCard}>
         <div style={styles.totalRow}>
           <span>Amount</span>
@@ -395,6 +417,14 @@ const AddFunds = () => {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Success Toast */}
+      {showToast && (
+        <div style={styles.toast}>
+          <FaCheckCircle size={22} color="white" />
+          <span>Successfully added funds!</span>
         </div>
       )}
 
