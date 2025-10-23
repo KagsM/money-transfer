@@ -7,6 +7,7 @@ import AdminTransactions from './components/AdminTransactions';
 import AdminUsers from './components/AdminUsers';
 import AdminWallets from './components/AdminWallets';
 import Profile from './pages/Profile';
+import UserHomePage from './pages/UserHomePage';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/admin/dashboard/users" element={<AdminUsers />} />
           <Route path="/admin/dashboard/wallets" element={<AdminWallets />} />
           <Route path="/admin/profile" element={<Profile />} />
+          <Route path="/user/dashboard" element={<UserHomePage />} />
         </Routes>
       </Router>
     </>

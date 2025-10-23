@@ -3802,3 +3802,462 @@ button {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }
+/* UserHomePage Styles */
+.user-home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.balance-card {
+  background: linear-gradient(135deg, #4465f7 0%, #4465f7 100%);
+  border-radius: 20px;
+  padding: 32px;
+  color: white;
+  margin-bottom: 32px;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+.balance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.balance-label {
+  font-size: 14px;
+  opacity: 0.9;
+  margin: 0 0 8px 0;
+}
+
+.balance-amount {
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.wallet-icon {
+  font-size: 48px;
+}
+
+.action-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+
+.action-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-icon {
+  font-size: 20px;
+}
+
+.quick-actions {
+  margin-bottom: 32px;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 16px;
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.quick-action-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  text-decoration: none;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.quick-action-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: #667eea;
+}
+
+.action-icon {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.action-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0 0 4px 0;
+}
+
+.action-desc {
+  font-size: 14px;
+  color: #718096;
+  margin: 0;
+}
+
+.recent-transactions {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.transactions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.view-all-link {
+  color: #667eea;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.view-all-link:hover {
+  text-decoration: underline;
+}
+
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.transaction-item {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: #f7fafc;
+  border-radius: 12px;
+  gap: 12px;
+}
+
+.transaction-icon {
+  font-size: 24px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 10px;
+}
+
+.transaction-details {
+  flex: 1;
+}
+
+.transaction-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0 0 4px 0;
+}
+
+.transaction-date {
+  font-size: 14px;
+  color: #718096;
+  margin: 0;
+}
+
+.transaction-amount {
+  text-align: right;
+}
+
+.amount {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.amount.received {
+  color: #059669;
+}
+
+.amount.sent {
+  color: #dc2626;
+}
+
+.status {
+  font-size: 12px;
+  color: #718096;
+  text-transform: capitalize;
+}
+/* Add to your existing balance card styles */
+.balance-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.balance-stat {
+  text-align: center;
+  flex: 1;
+}
+
+.stat-label {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-amount {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.stat-amount.positive {
+  color: #34d399;
+}
+
+.stat-amount.negative {
+  color: #f87171;
+}
+
+.stat-divider {
+  width: 1px;
+  background: rgba(255, 255, 255, 0.3);
+  margin: 0 10px;
+}
+/* ====================================
+   Bottom Navigation Styles
+   ==================================== */
+
+.bottom-nav-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.bottom-nav {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 1) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.bottom-nav__container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 8px 16px 12px;
+}
+
+.bottom-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 16px;
+  min-width: 70px;
+}
+
+.bottom-nav__item:hover {
+  background: rgba(99, 102, 241, 0.05);
+  transform: translateY(-2px);
+}
+
+.bottom-nav__item:active {
+  transform: translateY(0);
+}
+
+.bottom-nav__icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.bottom-nav__icon {
+  width: 24px;
+  height: 24px;
+  stroke: #64748b;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bottom-nav__item--active .bottom-nav__icon {
+  stroke: #6366f1;
+  transform: scale(1.1);
+}
+
+.bottom-nav__indicator {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+  border-radius: 2px;
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideIn {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 20px;
+    opacity: 1;
+  }
+}
+
+.bottom-nav__label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748b;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.02em;
+}
+
+.bottom-nav__item--active .bottom-nav__label {
+  color: #6366f1;
+  font-weight: 600;
+}
+
+/* ====================================
+   Dark Mode Support
+   ==================================== */
+
+@media (prefers-color-scheme: dark) {
+  .bottom-nav {
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(15, 23, 42, 1) 100%);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .bottom-nav__item:hover {
+    background: rgba(99, 102, 241, 0.15);
+  }
+
+  .bottom-nav__icon {
+    stroke: #94a3b8;
+  }
+
+  .bottom-nav__label {
+    color: #94a3b8;
+  }
+
+  .bottom-nav__item--active .bottom-nav__icon {
+    stroke: #818cf8;
+  }
+
+  .bottom-nav__item--active .bottom-nav__label {
+    color: #818cf8;
+  }
+}
+
+/* Dark mode class support (if using manual dark mode toggle) */
+.dark-mode .bottom-nav {
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(15, 23, 42, 1) 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .bottom-nav__item:hover {
+  background: rgba(99, 102, 241, 0.15);
+}
+
+.dark-mode .bottom-nav__icon {
+  stroke: #94a3b8;
+}
+
+.dark-mode .bottom-nav__label {
+  color: #94a3b8;
+}
+
+.dark-mode .bottom-nav__item--active .bottom-nav__icon {
+  stroke: #818cf8;
+}
+
+.dark-mode .bottom-nav__item--active .bottom-nav__label {
+  color: #818cf8;
+}
+
+/* ====================================
+   Responsive Adjustments
+   ==================================== */
+
+@media (max-width: 640px) {
+  .bottom-nav__container {
+    padding: 6px 8px 10px;
+  }
+
+  .bottom-nav__item {
+    padding: 6px 12px;
+    min-width: 60px;
+  }
+
+  .bottom-nav__label {
+    font-size: 10px;
+  }
+}
+
+@media (min-width: 768px) {
+  .bottom-nav__item {
+    padding: 10px 20px;
+    min-width: 80px;
+  }
+
+  .bottom-nav__label {
+    font-size: 12px;
+  }
+}
