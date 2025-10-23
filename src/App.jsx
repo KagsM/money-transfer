@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from "./pages/Login";
-import './App.css'
 import Logout from './pages/Logout';
 import AdminOverview from './components/AdminOverview';
 import AdminTransactions from './components/AdminTransactions';
@@ -11,6 +10,8 @@ import Profile from './pages/Profile';
 import UserHomePage from './pages/UserHomePage';
 import UserAddFunds from './pages/UserAddFunds';
 import UserSendMoney from './pages/UserSendMoney';
+import UserHistory from './pages/UserHistory';// 👈 ADD THIS TOO
+import UserWallet from './pages/UserWallet'; // 👈 ADD THIS LINE
 
 
 function App() {
@@ -29,6 +30,8 @@ function App() {
           <Route path="/user/dashboard" element={<UserHomePage />} />
           <Route path="/user/add-funds" element={<UserAddFunds />} />
           <Route path="/user/send-money" element={<UserSendMoney />} />
+          <Route path="/user/transactions" element={<UserHistory />} />
+          <Route path="/user/wallet" element={<UserWallet />} />
         </Routes>
       </Router>
     </>
