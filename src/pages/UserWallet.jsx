@@ -150,7 +150,7 @@ export default function UserWallet() {
             <span className="text-gray-800 font-medium text-sm">Send</span>
           </button>
           <button
-            onClick={() => navigate("/user/history")}
+            onClick={() => navigate("/user/transactions")}
             className="flex-1 bg-white rounded-2xl p-4 flex flex-col items-center justify-center gap-2 hover:bg-gray-50 transition shadow"
           >
             <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
