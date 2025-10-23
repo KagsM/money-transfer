@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaCreditCard, FaUniversity, FaMobileAlt, FaCheckCircle } from "react-icons/fa";
+import { FaCreditCard, FaUniversity, FaMobileAlt, FaCheckCircle, FaArrowLeft } from "react-icons/fa";
 
 const AddFunds = () => {
   const [amount, setAmount] = useState("");
@@ -306,7 +306,25 @@ const AddFunds = () => {
       boxShadow: "0 4px 16px rgba(0,0,0,0.25)",
       animation: "fadeInOut 3s ease forwards",
       zIndex: 200,
-},
+    },
+    headerTitleWrapper: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    },
+
+    backBtn: {
+    background: "rgba(255,255,255,0.15)",
+    border: "none",
+    borderRadius: "8px",
+    padding: "8px 10px",
+    cursor: "pointer",
+    transition: "all 0.25s ease",
+    },
+    backBtnHover: {
+    background: "rgba(255,255,255,0.25)",
+    transform: "translateX(-2px)",
+    },
   };
 
 const styleSheet = document.styleSheets[0] || (() => {
@@ -333,7 +351,16 @@ if (![...styleSheet.cssRules].some(r => r.name === "fadeInOut")) {
       {/* Header */}
       <div style={styles.header}>
         <div style={styles.headerContent}>
-          <h2 style={styles.headerTitle}>Add Funds</h2>
+            <div style={styles.headerTitleWrapper}>
+                <button
+                style={styles.backBtn}
+                onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.backBtnHover)}
+                onMouseLeave={(e) => Object.assign(e.currentTarget.style, styles.backBtn)}
+                >
+                <FaArrowLeft size={16} color="white" />
+                </button>
+                <h2 style={styles.headerTitle}>Add Funds</h2>
+            </div>
           <p style={styles.headerSubtext}>
             Select or enter the amount you want to add, then choose your payment method.
           </p>

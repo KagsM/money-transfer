@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaSearch, FaPaperPlane, FaTimes, FaCheckCircle } from "react-icons/fa";
+import { FaSearch, FaPaperPlane, FaTimes, FaCheckCircle, FaArrowLeft } from "react-icons/fa";
 
 const SendMoney = () => {
   const [search, setSearch] = useState("");
@@ -309,6 +309,24 @@ const SendMoney = () => {
     zIndex: 200,
     fontWeight: 500,
     },
+    headerTitleWrapper: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    },
+
+    backBtn: {
+    background: "rgba(255,255,255,0.15)",
+    border: "none",
+    borderRadius: "8px",
+    padding: "8px 10px",
+    cursor: "pointer",
+    transition: "all 0.25s ease",
+    },
+    backBtnHover: {
+    background: "rgba(255,255,255,0.25)",
+    transform: "translateX(-2px)",
+    },
   };
 
   const styleSheet = document.styleSheets[0];
@@ -336,7 +354,16 @@ if (styleSheet) {
       <div style={styles.header}>
         <div style={styles.headerContent}>
           <div style={styles.headerTop}>
-            <h2 style={styles.headerTitle}>Send Money</h2>
+            <div style={styles.headerTitleWrapper}>
+                <button
+                style={styles.backBtn}
+                onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.backBtnHover)}
+                onMouseLeave={(e) => Object.assign(e.currentTarget.style, styles.backBtn)}
+                >
+                <FaArrowLeft size={16} color="white" />
+                </button>
+                <h2 style={styles.headerTitle}>Send Money</h2>
+            </div>
             <div style={styles.searchBar}>
               <FaSearch style={styles.searchIcon} />
               <input
