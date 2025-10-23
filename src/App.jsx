@@ -12,6 +12,9 @@ import UserAddFunds from './pages/UserAddFunds';
 import UserSendMoney from './pages/UserSendMoney';
 import UserHistory from './pages/UserHistory';// 👈 ADD THIS TOO
 import UserWallet from './pages/UserWallet'; // 👈 ADD THIS LINE
+import UserContacts from './pages/UserContacts';
+import AddBeneficiary from './pages/AddBeneficiary';
+import UserProfile from './pages/UserProfile';
 
 
 function App() {
@@ -27,11 +30,15 @@ function App() {
           <Route path="/admin/dashboard/users" element={<AdminUsers />} />
           <Route path="/admin/dashboard/wallets" element={<AdminWallets />} />
           <Route path="/admin/profile" element={<Profile />} />
+
           <Route path="/user/dashboard" element={<UserHomePage />} />
           <Route path="/user/add-funds" element={<UserAddFunds />} />
           <Route path="/user/send-money" element={<UserSendMoney />} />
           <Route path="/user/transactions" element={<UserHistory />} />
           <Route path="/user/wallet" element={<UserWallet />} />
+          <Route path="/user/contacts" element={<UserContacts />} />
+          <Route path="/user/add-beneficiary" element={<AddBeneficiary />} />
+          <Route path="/user/profile" element={<UserProfile />} />
         </Routes>
       </Router>
     </>
