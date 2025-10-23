@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from "./pages/Login";
-import './App.css'
+import './App.css';
 import Logout from './pages/Logout';
 import AdminOverview from './components/AdminOverview';
 import AdminTransactions from './components/AdminTransactions';
@@ -8,10 +8,10 @@ import AdminUsers from './components/AdminUsers';
 import AdminWallets from './components/AdminWallets';
 import Profile from './pages/Profile';
 import UserHomePage from './pages/UserHomePage';
-
+import UserWallet from './pages/UserWallet'; // 👈 ADD THIS LINE
+import UserHistory from './pages/UserHistory'; // 👈 ADD THIS TOO
 
 function App() {
-
   return (
     <>
       <Router>
@@ -24,10 +24,12 @@ function App() {
           <Route path="/admin/dashboard/wallets" element={<AdminWallets />} />
           <Route path="/admin/profile" element={<Profile />} />
           <Route path="/user/dashboard" element={<UserHomePage />} />
+          <Route path="/user/wallet" element={<UserWallet />} />
+          <Route path="/user/wallet/history" element={<UserHistory />} />
         </Routes>
       </Router>
     </>
-  )
+  );
 }
 
 export default App;
