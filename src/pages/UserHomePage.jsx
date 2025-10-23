@@ -66,8 +66,8 @@ function UserHomePage() {
         <div className="quick-actions">
           <h2 className="section-title">Quick Actions</h2>
           <div className="actions-grid">
-            <Link to="/user/transactions" className="quick-action-card">
-              <h3 className="action-title">Transactions</h3>
+            <Link to="/user/send-money" className="quick-action-card">
+              <h3 className="action-title">Send Money</h3>
               <p className="action-desc">View history</p>
             </Link>
             <Link to="/user/contacts" className="quick-action-card">
@@ -82,9 +82,9 @@ function UserHomePage() {
         </div>
 
         {/* Recent Transactions */}
+        <h2 className="section-title">Recent Transactions</h2>
         <div className="recent-transactions">
           <div className="transactions-header">
-            <h2 className="section-title">Recent Transactions</h2>
             <Link to="/user/transactions" className="view-all-link">View All →</Link>
           </div>
           
