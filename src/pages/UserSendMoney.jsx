@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaSearch, FaPaperPlane, FaTimes, FaCheckCircle, FaArrowLeft } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const SendMoney = () => {
   const [search, setSearch] = useState("");
@@ -11,6 +12,7 @@ const SendMoney = () => {
   const [confirming, setConfirming] = useState(false);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
+  const navigate = useNavigate();
 
   const presetAmounts = [10, 25, 50, 100, 250, 500];
   const transactionChargeRate = 0.015; // 1.5%
@@ -359,6 +361,7 @@ if (styleSheet) {
                 style={styles.backBtn}
                 onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.backBtnHover)}
                 onMouseLeave={(e) => Object.assign(e.currentTarget.style, styles.backBtn)}
+                onClick={() => navigate(-1)}
                 >
                 <FaArrowLeft size={16} color="white" />
                 </button>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaCreditCard, FaUniversity, FaMobileAlt, FaCheckCircle, FaArrowLeft } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const AddFunds = () => {
   const [amount, setAmount] = useState("");
@@ -9,6 +10,7 @@ const AddFunds = () => {
   const [hoveredMethod, setHoveredMethod] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const navigate = useNavigate();
 
   const presetAmounts = [10, 25, 50, 100, 250, 500];
 
@@ -356,6 +358,7 @@ if (![...styleSheet.cssRules].some(r => r.name === "fadeInOut")) {
                 style={styles.backBtn}
                 onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.backBtnHover)}
                 onMouseLeave={(e) => Object.assign(e.currentTarget.style, styles.backBtn)}
+                onClick={() => navigate(-1)}
                 >
                 <FaArrowLeft size={16} color="white" />
                 </button>
