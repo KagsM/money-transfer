@@ -3887,9 +3887,11 @@ button {
 }
 
 .actions-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
+  display: flex;
+  flex-direction: row; /* Horizontal row on small screens */
+  gap: 1rem;
+  overflow-x: auto; /* Allow horizontal scrolling if needed */
+  padding-bottom: 0.5rem;
 }
 
 .quick-action-card {
@@ -4259,5 +4261,22 @@ button {
 
   .bottom-nav__label {
     font-size: 12px;
+  }
+}
+.quick-action-card {
+  flex: 0 0 auto; /* Don't grow or shrink, maintain natural size */
+  min-width: 100px; /* Adjust based on your design */
+  text-align: center;
+}
+
+/* On larger screens, you might want them to take full width */
+@media (min-width: 768px) {
+  .actions-grid {
+    justify-content: space-between;
+    overflow-x: visible;
+  }
+  
+  .quick-action-card {
+    flex: 1;
   }
 }

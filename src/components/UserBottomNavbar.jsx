@@ -7,7 +7,7 @@ function UserBottomNavbar() {
   const navItems = [
     {
       path: '/user/dashboard',
-      label: 'Dashboard',
+      label: 'Home',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="bottom-nav__icon">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -15,17 +15,17 @@ function UserBottomNavbar() {
       )
     },
     {
-      path: '/user/send-money',
-      label: 'Send',
+      path: '/user/wallet',
+      label: 'Wallet',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="bottom-nav__icon">
-          <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M22 2L11 13M22 2l-7 20-9-9-4 20" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       )
     },
     {
       path: '/user/transactions',
-      label: 'Activity',
+      label: 'Transactions',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="bottom-nav__icon">
           <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
