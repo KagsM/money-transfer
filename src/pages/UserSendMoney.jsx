@@ -100,10 +100,35 @@ const SendMoney = () => {
       gap: "12px",
     },
     headerTop: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    gap: "10px",
     },
+    searchBarBelow: {
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    marginTop: "12px",
+    width: "100%",
+    maxWidth: "400px",
+  },
+  searchIconBelow: {
+    position: "absolute",
+    left: "12px",
+    color: "#1e40af",
+  },
+  searchInputBelow: {
+    padding: "10px 12px 10px 36px",
+    borderRadius: "12px",
+    border: "none",
+    fontSize: "1rem",
+    outline: "none",
+    width: "100%",
+    background: "white",
+    color: "#1e293b",
+    boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+  },
     headerTitle: { fontSize: "1.8rem", fontWeight: 700 },
     searchBar: { position: "relative", display: "flex", alignItems: "center" },
     searchIcon: { position: "absolute", left: "12px", color: "#1e40af" },
@@ -320,8 +345,8 @@ const SendMoney = () => {
     backBtn: {
     background: "rgba(255,255,255,0.15)",
     border: "none",
-    borderRadius: "8px",
-    padding: "8px 10px",
+    borderRadius: "20px",
+    padding: "10px 10px",
     cursor: "pointer",
     transition: "all 0.25s ease",
     },
@@ -357,22 +382,23 @@ if (styleSheet) {
         <div style={styles.headerContent}>
           <div style={styles.headerTop}>
             <div style={styles.headerTitleWrapper}>
-                <button
+              <button
                 style={styles.backBtn}
                 onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.backBtnHover)}
                 onMouseLeave={(e) => Object.assign(e.currentTarget.style, styles.backBtn)}
                 onClick={() => navigate(-1)}
-                >
+              >
                 <FaArrowLeft size={16} color="white" />
-                </button>
-                <h2 style={styles.headerTitle}>Send Money</h2>
+              </button>
+              <h2 style={styles.headerTitle}>Send Money</h2>
             </div>
-            <div style={styles.searchBar}>
-              <FaSearch style={styles.searchIcon} />
+
+            <div style={styles.searchBarBelow}>
+              <FaSearch style={styles.searchIconBelow} />
               <input
-                style={styles.searchInput}
+                style={styles.searchInputBelow}
                 type="text"
-                placeholder="Search..."
+                placeholder="Search beneficiary..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />

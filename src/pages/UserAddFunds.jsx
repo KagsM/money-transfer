@@ -318,8 +318,8 @@ const AddFunds = () => {
     backBtn: {
     background: "rgba(255,255,255,0.15)",
     border: "none",
-    borderRadius: "8px",
-    padding: "8px 10px",
+    borderRadius: "20px",
+    padding: "10px 10px",
     cursor: "pointer",
     transition: "all 0.25s ease",
     },
