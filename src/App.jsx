@@ -8,9 +8,8 @@ import AdminUsers from './components/AdminUsers';
 import AdminWallets from './components/AdminWallets';
 import Profile from './pages/Profile';
 import UserHomePage from './pages/UserHomePage';
-import UserWallet from './pages/UserWallet'; // 👈 ADD THIS LINE
-import UserHistory from './pages/UserHistory'; // 👈 ADD THIS TOO
-
+import UserWallet from './pages/UserWallet'; 
+import UserHistory from './pages/UserHistory';
 function App() {
   return (
     <>
@@ -25,7 +24,7 @@ function App() {
           <Route path="/admin/profile" element={<Profile />} />
           <Route path="/user/dashboard" element={<UserHomePage />} />
           <Route path="/user/wallet" element={<UserWallet />} />
-          <Route path="/user/wallet/history" element={<UserHistory />} />
+          <Route path="/user/history" element={<UserHistory />} />
         </Routes>
       </Router>
     </>
