@@ -1,57 +1,208 @@
+// src/pages/UserAddFunds.jsx - PESAPAY VERSION
 import React, { useState, useEffect } from "react";
-import { FaCreditCard, FaUniversity, FaMobileAlt, FaCheckCircle, FaArrowLeft } from "react-icons/fa";
+import { FaCreditCard, FaUniversity, FaMobileAlt, FaCheckCircle, FaArrowLeft, FaSpinner } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { walletAPI, validateAmount, validatePhone } from "../services/api";
+import { useAuth } from "../context/AuthContext";
 
 const AddFunds = () => {
   const [amount, setAmount] = useState("");
+  const [phone, setPhone] = useState("");
+  const [currency, setCurrency] = useState("USD"); // New for Pesapay
   const [method, setMethod] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hoveredPreset, setHoveredPreset] = useState(null);
   const [hoveredMethod, setHoveredMethod] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState('success');
+  const [error, setError] = useState('');
+  const [paymentData, setPaymentData] = useState(null); // New for Pesapay polling
   const navigate = useNavigate();
+  const { user, refreshWallet } = useAuth();
 
   const presetAmounts = [10, 25, 50, 100, 250, 500];
 
   const methods = [
-    { id: "card", name: "Credit / Debit Card", icon: <FaCreditCard size={28} color="#2563eb" />, fee: 2.5 },
-    { id: "bank", name: "Bank Transfer", icon: <FaUniversity size={28} color="#2563eb" />, fee: 1.2 },
-    { id: "mobile", name: "Mobile Money", icon: <FaMobileAlt size={28} color="#2563eb" />, fee: 1.8 },
+    { 
+      id: "mobile", 
+      name: "Mobile Money (Pesapay)", // Updated name
+      icon: <FaMobileAlt size={28} color="#2563eb" />, 
+      fee: 0 
+    },
   ];
 
-  const handlePreset = (val) => setAmount(val.toString());
+  // Set default phone from user profile
+  useEffect(() => {
+    if (user?.phone) {
+      setPhone(user.phone);
+    }
+  }, [user]);
+
+  // Poll for Pesapay payment status
+  useEffect(() => {
+    if (paymentData) {
+      startPolling(paymentData.reference);
+    }
+  }, [paymentData]);
+
+  const handlePreset = (val) => {
+    setAmount(val.toString());
+    setError('');
+  };
 
   const handleInput = (e) => {
     const val = e.target.value;
     if (val === "" || (/^\d*\.?\d*$/.test(val) && parseFloat(val) >= 0)) {
       setAmount(val);
+      setError('');
     }
+  };
+
+  const handlePhoneChange = (e) => {
+    setPhone(e.target.value);
+    setError('');
+  };
+
+  const handleCurrencyChange = (e) => {
+    setCurrency(e.target.value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!amount || !method) return;
+    setError('');
+    
+    // Validate amount
+    const amountValidation = validateAmount(amount);
+    if (!amountValidation.valid) {
+      setError(amountValidation.error);
+      return;
+    }
+    
+    if (!method) {
+      setError('Please select a payment method');
+      return;
+    }
+    
     setShowModal(true);
   };
 
-  const confirmAddFunds = () => {
+  const confirmAddFunds = async () => {
+    if (!amount) {
+      showToastMessage('Please enter an amount', 'error');
+      return;
+    }
+
     setLoading(true);
-    setTimeout(() => {
+    setError('');
+
+    try {
+      if (method.id === 'mobile') {
+        // Pesapay deposit
+        if (!phone) {
+          showToastMessage('Phone number is required for Pesapay', 'error');
+          setLoading(false);
+          return;
+        }
+
+        // Validate phone
+        const phoneValidation = validatePhone(phone);
+        if (!phoneValidation.valid) {
+          showToastMessage(phoneValidation.error, 'error');
+          setLoading(false);
+          return;
+        }
+
+        const response = await walletAPI.deposit(
+          parseFloat(amount), 
+          phoneValidation.formatted,
+          currency
+        );
+        
+        if (response.success) {
+          showToastMessage(
+            `✅ Payment initiated! Redirecting to Pesapay...`,
+            'success'
+          );
+          
+          // Store payment data for polling
+          setPaymentData(response);
+          
+          // Redirect to Pesapay payment page
+          if (response.payment_url) {
+            window.open(response.payment_url, '_blank');
+          }
+          
+          setShowModal(false);
+          setAmount('');
+          setPhone(user?.phone || '');
+        } else {
+          showToastMessage(response.error || 'Payment initiation failed', 'error');
+        }
+      } else {
+        // Other payment methods (unchanged)
+        const response = await walletAPI.addFunds(parseFloat(amount), '', method.id);
+        
+        if (response.success) {
+          showToastMessage(`✅ Successfully added ${formatCurrency(amount)}!`, 'success');
+          
+          // Refresh wallet balance
+          await refreshWallet();
+          
+          setShowModal(false);
+          setAmount('');
+        } else {
+          showToastMessage(response.error || 'Transaction failed', 'error');
+        }
+      }
+    } catch (err) {
+      console.error('Add funds error:', err);
+      const errorMessage = err.data?.error || err.message || 'Failed to add funds';
+      showToastMessage(`❌ ${errorMessage}`, 'error');
+    } finally {
       setLoading(false);
-      setShowModal(false);
-      setShowToast(true);
-      setAmount("");
-      setMethod(null);
-    }, 1500);
+    }
   };
 
-  useEffect(() => {
-    if (showToast) {
-      const timer = setTimeout(() => setShowToast(false), 3500);
-      return () => clearTimeout(timer);
+  const startPolling = async (reference, attempts = 0) => {
+    if (attempts >= 20) { // Stop after 20 attempts (100 seconds)
+      showToastMessage('Payment timeout. Please check your Pesapay account.', 'error');
+      setPaymentData(null);
+      return;
     }
-  }, [showToast]);
+
+    setTimeout(async () => {
+      try {
+        const response = await walletAPI.checkPaymentStatus(reference);
+        
+        if (response.status === 'completed') {
+          showToastMessage('✅ Payment completed successfully!', 'success');
+          await refreshWallet();
+          setPaymentData(null);
+        } else if (response.status === 'failed') {
+          showToastMessage('❌ Payment failed or was cancelled', 'error');
+          setPaymentData(null);
+        } else {
+          // Still pending, poll again
+          startPolling(reference, attempts + 1);
+        }
+      } catch (err) {
+        console.error('Status check error:', err);
+        // Continue polling on error
+        startPolling(reference, attempts + 1);
+      }
+    }, 5000); // Check every 5 seconds
+  };
+
+  const showToastMessage = (message, type = 'success') => {
+    setToastMessage(message);
+    setToastType(type);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 5000);
+  };
+
+  const formatCurrency = (val) => `$${parseFloat(val || 0).toFixed(2)}`;
 
   const numericAmount = parseFloat(amount) || 0;
   const fee = method ? (numericAmount * method.fee) / 100 : 0;
@@ -84,6 +235,22 @@ const AddFunds = () => {
       maxWidth: "900px",
       margin: "0 auto",
     },
+    headerTitleWrapper: {
+      display: "flex",
+      alignItems: "center",
+      gap: "10px",
+    },
+    backBtn: {
+      background: "rgba(255,255,255,0.15)",
+      border: "none",
+      borderRadius: "20px",
+      padding: "10px",
+      cursor: "pointer",
+      transition: "all 0.25s ease",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
     headerTitle: {
       fontSize: "1.8rem",
       fontWeight: 700,
@@ -102,6 +269,16 @@ const AddFunds = () => {
       width: "440px",
       maxWidth: "95%",
       transition: "all 0.3s ease",
+    },
+    errorMessage: {
+      background: "#fee2e2",
+      border: "1px solid #ef4444",
+      borderRadius: "8px",
+      padding: "12px",
+      color: "#dc2626",
+      fontSize: "14px",
+      marginBottom: "16px",
+      display: error ? "block" : "none",
     },
     title: {
       fontSize: "1.2rem",
@@ -126,16 +303,13 @@ const AddFunds = () => {
       fontWeight: 500,
       cursor: "pointer",
       transition: "all 0.3s ease",
-      boxShadow: active
-        ? "0 4px 12px rgba(37,99,235,0.4)"
-        : hovered
-        ? "0 4px 10px rgba(59,130,246,0.25)"
-        : "none",
+      boxShadow: active ? "0 4px 12px rgba(37,99,235,0.4)" : hovered ? "0 4px 10px rgba(59,130,246,0.25)" : "none",
       transform: hovered ? "translateY(-3px)" : "translateY(0)",
     }),
     inputWrapper: {
       position: "relative",
       width: "100%",
+      marginBottom: "16px",
     },
     currencySymbol: {
       position: "absolute",
@@ -155,6 +329,16 @@ const AddFunds = () => {
       outline: "none",
       transition: "border-color 0.2s ease, box-shadow 0.2s ease",
     },
+    select: {
+      width: "100%",
+      padding: "14px",
+      borderRadius: "12px",
+      border: "1px solid #cbd5e0",
+      fontSize: "1rem",
+      outline: "none",
+      transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+      background: "white",
+    },
     methodsContainer: {
       display: "flex",
       flexDirection: "column",
@@ -168,21 +352,9 @@ const AddFunds = () => {
       justifyContent: "space-between",
       borderRadius: "14px",
       padding: "18px 20px",
-      background: active
-        ? "linear-gradient(90deg, #eff6ff 0%, #dbeafe 100%)"
-        : hovered
-        ? "#f8fafc"
-        : "#fff",
-      border: active
-        ? "2px solid #2563eb"
-        : hovered
-        ? "1px solid #93c5fd"
-        : "1px solid #e2e8f0",
-      boxShadow: active
-        ? "0 4px 12px rgba(37,99,235,0.3)"
-        : hovered
-        ? "0 4px 10px rgba(59,130,246,0.15)"
-        : "0 3px 10px rgba(0,0,0,0.06)",
+      background: active ? "linear-gradient(90deg, #eff6ff 0%, #dbeafe 100%)" : hovered ? "#f8fafc" : "#fff",
+      border: active ? "2px solid #2563eb" : hovered ? "1px solid #93c5fd" : "1px solid #e2e8f0",
+      boxShadow: active ? "0 4px 12px rgba(37,99,235,0.3)" : hovered ? "0 4px 10px rgba(59,130,246,0.15)" : "0 3px 10px rgba(0,0,0,0.06)",
       cursor: "pointer",
       transition: "all 0.3s ease",
       transform: hovered ? "translateY(-3px)" : "translateY(0)",
@@ -233,16 +405,11 @@ const AddFunds = () => {
       opacity: loading || !(numericAmount > 0 && method) ? 0.6 : 1,
       transition: "all 0.25s ease",
       marginTop: "10px",
-      boxShadow:
-        loading || !(numericAmount > 0 && method)
-          ? "none"
-          : "0 4px 16px rgba(37,99,235,0.4)",
-    },
-    footer: {
-      marginTop: "30px",
-      fontSize: "0.9rem",
-      color: "#475569",
-      textAlign: "center",
+      boxShadow: loading || !(numericAmount > 0 && method) ? "none" : "0 4px 16px rgba(37,99,235,0.4)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "8px",
     },
     modalOverlay: {
       position: "fixed",
@@ -282,6 +449,10 @@ const AddFunds = () => {
       fontWeight: 600,
       cursor: "pointer",
       transition: "all 0.3s ease",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "8px",
     },
     cancelBtn: {
       flex: 1,
@@ -294,11 +465,11 @@ const AddFunds = () => {
       cursor: "pointer",
       transition: "all 0.3s ease",
     },
-      toast: {
+    toast: {
       position: "fixed",
       bottom: "20px",
       right: "20px",
-      background: "#2563eb",
+      background: toastType === 'success' ? "#2563eb" : "#ef4444",
       color: "#fff",
       borderRadius: "10px",
       padding: "16px 20px",
@@ -306,69 +477,34 @@ const AddFunds = () => {
       alignItems: "center",
       gap: "10px",
       boxShadow: "0 4px 16px rgba(0,0,0,0.25)",
-      animation: "fadeInOut 3s ease forwards",
+      animation: "fadeInOut 5s ease forwards",
       zIndex: 200,
-    },
-    headerTitleWrapper: {
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-    },
-
-    backBtn: {
-    background: "rgba(255,255,255,0.15)",
-    border: "none",
-    borderRadius: "20px",
-    padding: "10px 10px",
-    cursor: "pointer",
-    transition: "all 0.25s ease",
-    },
-    backBtnHover: {
-    background: "rgba(255,255,255,0.25)",
-    transform: "translateX(-2px)",
+      maxWidth: "400px",
     },
   };
-
-const styleSheet = document.styleSheets[0] || (() => {
-  const style = document.createElement("style");
-  document.head.appendChild(style);
-  return style.sheet;
-})();
-
-const fadeInOut = `
-  @keyframes fadeInOut {
-    0% { opacity: 0; transform: translateX(30px); }
-    10% { opacity: 1; transform: translateX(0); }
-    80% { opacity: 1; transform: translateX(0); }
-    100% { opacity: 0; transform: translateY(20px); }
-  }
-`;
-
-if (![...styleSheet.cssRules].some(r => r.name === "fadeInOut")) {
-  styleSheet.insertRule(fadeInOut, styleSheet.cssRules.length);
-}
 
   return (
     <div style={styles.container}>
       {/* Header */}
       <div style={styles.header}>
         <div style={styles.headerContent}>
-            <div style={styles.headerTitleWrapper}>
-                <button
-                style={styles.backBtn}
-                onMouseEnter={(e) => Object.assign(e.currentTarget.style, styles.backBtnHover)}
-                onMouseLeave={(e) => Object.assign(e.currentTarget.style, styles.backBtn)}
-                onClick={() => navigate(-1)}
-                >
-                <FaArrowLeft size={16} color="white" />
-                </button>
-                <h2 style={styles.headerTitle}>Add Funds</h2>
-            </div>
+          <div style={styles.headerTitleWrapper}>
+            <button
+              style={styles.backBtn}
+              onClick={() => navigate(-1)}
+            >
+              <FaArrowLeft size={16} color="white" />
+            </button>
+            <h2 style={styles.headerTitle}>Add Funds</h2>
+          </div>
           <p style={styles.headerSubtext}>
-            Select or enter the amount you want to add, then choose your payment method.
+            Select or enter the amount you want to add.
           </p>
         </div>
       </div>
+
+      {/* Error Message */}
+      <div style={styles.errorMessage}>{error}</div>
 
       {/* Preset & Input */}
       <div style={styles.card}>
@@ -396,6 +532,30 @@ if (![...styleSheet.cssRules].some(r => r.name === "fadeInOut")) {
             style={styles.input}
           />
         </div>
+        
+        {/* Currency Selection for Pesapay */}
+        {method?.id === 'mobile' && (
+          <>
+            <div style={styles.inputWrapper}>
+              <select
+                value={currency}
+                onChange={handleCurrencyChange}
+                style={styles.select}
+              >
+                <option value="KES">KES</option>
+              </select>
+            </div>
+            <div style={styles.inputWrapper}>
+              <input
+                type="tel"
+                placeholder="Enter phone number (e.g. 254712345678)"
+                value={phone}
+                onChange={handlePhoneChange}
+                style={styles.input}
+              />
+            </div>
+          </>
+        )}
       </div>
 
       {/* Methods */}
@@ -423,15 +583,15 @@ if (![...styleSheet.cssRules].some(r => r.name === "fadeInOut")) {
       <div style={styles.totalCard}>
         <div style={styles.totalRow}>
           <span>Amount</span>
-          <span>${numericAmount.toFixed(2)}</span>
+          <span>{formatCurrency(numericAmount)}</span>
         </div>
         <div style={styles.totalRow}>
           <span>Fee ({method ? method.fee : 0}%)</span>
-          <span>${fee.toFixed(2)}</span>
+          <span>{formatCurrency(fee)}</span>
         </div>
         <div style={{ ...styles.totalRow, ...styles.totalHighlight }}>
           <span>Total Charged</span>
-          <span>${total.toFixed(2)}</span>
+          <span>{formatCurrency(total)}</span>
         </div>
       </div>
 
@@ -441,9 +601,14 @@ if (![...styleSheet.cssRules].some(r => r.name === "fadeInOut")) {
         disabled={loading || !(numericAmount > 0 && method)}
         style={styles.button}
       >
-        {loading
-          ? "Processing..."
-          : `Add $${amount || "0"} ${method ? `via ${method.name}` : ""}`}
+        {loading ? (
+          <>
+            <FaSpinner className="animate-spin" />
+            Processing...
+          </>
+        ) : (
+          `Add ${formatCurrency(amount || 0)} ${method ? `via ${method.name}` : ""}`
+        )}
       </button>
 
       {/* Confirmation Modal */}
@@ -452,34 +617,65 @@ if (![...styleSheet.cssRules].some(r => r.name === "fadeInOut")) {
           <div style={styles.modal}>
             <h3 style={{ color: "#1e3a8a", marginBottom: "15px" }}>Confirm Top-Up</h3>
             <p>
-              Add <strong>${numericAmount.toFixed(2)}</strong> using{" "}
+              Add <strong>{formatCurrency(numericAmount)}</strong> using{" "}
               <strong>{method?.name}</strong>?
             </p>
+            {method?.id === 'mobile' && (
+              <>
+                <p style={{ marginTop: "10px", fontSize: "14px", color: "#64748b" }}>
+                  Phone: <strong>{phone}</strong>
+                </p>
+                <p style={{ marginTop: "5px", fontSize: "14px", color: "#64748b" }}>
+                  Currency: <strong>{currency}</strong>
+                </p>
+              </>
+            )}
             <div style={styles.modalButtons}>
               <button style={styles.cancelBtn} onClick={() => setShowModal(false)}>
                 Cancel
               </button>
-              <button style={styles.confirmBtn} onClick={confirmAddFunds}>
-                {loading ? "Processing..." : "Confirm"}
+              <button style={styles.confirmBtn} onClick={confirmAddFunds} disabled={loading}>
+                {loading ? (
+                  <>
+                    <FaSpinner className="animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  "Confirm"
+                )}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Success Toast */}
+      {/* Toast */}
       {showToast && (
         <div style={styles.toast}>
-          <FaCheckCircle size={22} color="white" />
-          <span>Successfully added funds!</span>
+          {toastType === 'success' ? (
+            <FaCheckCircle size={22} />
+          ) : (
+            <span style={{ fontSize: "22px" }}>⚠️</span>
+          )}
+          <span>{toastMessage}</span>
         </div>
       )}
 
-      {/* Footer */}
-      <div style={styles.footer}>
-        🔒 Secure payment processing &nbsp; | &nbsp; ⚡ Instant fund availability &nbsp; | &nbsp;
-        💰 Industry-leading low fees
-      </div>
+      <style>{`
+        @keyframes fadeInOut {
+          0% { opacity: 0; transform: translateX(30px); }
+          10% { opacity: 1; transform: translateX(0); }
+          90% { opacity: 1; transform: translateX(0); }
+          100% { opacity: 0; transform: translateY(20px); }
+        }
+        .animate-spin {
+          animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 };
