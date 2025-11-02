@@ -10,17 +10,19 @@ import Profile from './pages/Profile';
 import UserHomePage from './pages/UserHomePage';
 import UserAddFunds from './pages/UserAddFunds';
 import UserSendMoney from './pages/UserSendMoney';
-import UserHistory from './pages/UserHistory';// 👈 ADD THIS TOO
-import UserWallet from './pages/UserWallet'; // 👈 ADD THIS LINE
+import UserHistory from './pages/UserHistory';
+import UserWallet from './pages/UserWallet';
 import UserContacts from './pages/UserContacts';
 import AddBeneficiary from './pages/AddBeneficiary';
 import UserProfile from './pages/UserProfile';
+import TestMpesa from './pages/TestMpesa';
+import { AuthProvider } from './context/AuthContext';
+import EditBeneficiary from './pages/EditBeneficiary';
 
 
 function App() {
-
   return (
-    <>
+    <AuthProvider>
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -39,10 +41,12 @@ function App() {
           <Route path="/user/contacts" element={<UserContacts />} />
           <Route path="/user/add-beneficiary" element={<AddBeneficiary />} />
           <Route path="/user/profile" element={<UserProfile />} />
+          <Route path="/user/test-mpesa" element={<TestMpesa />} />
+          <Route path="/user/edit-beneficiary/:id" element={<EditBeneficiary />} />
         </Routes>
       </Router>
-    </>
-  )
+    </AuthProvider>
+  );
 }
 
 export default App;
