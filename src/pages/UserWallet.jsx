@@ -1,31 +1,68 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Copy, ArrowLeft, Wallet, CreditCard, ArrowDownToLine, Send, History } from "lucide-react";
+import { walletAPI } from "../services/api";
 
 export default function UserWallet() {
   const [showBalance, setShowBalance] = useState(true);
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // Real data from API
+  const [walletData, setWalletData] = useState(null);
+  const [balance, setBalance] = useState(0);
+  const [transactions, setTransactions] = useState([]);
+  
   const navigate = useNavigate();
 
+  // Hardcoded for demo - in real app, get from auth/context
+  const userId = 1;
+  
   const walletId = "QP-SAL-7YUD0B";
-  const balance = "$5420.50";
   const cardNumber = "4532 **** **** 8901";
   const cardHolder = "JOHN DOE";
   const cardExpiry = "12/28";
-  const totalSent = "$640.00";
-  const totalReceived = "$1800.00";
 
-  const transactions = [
-    { id: 1, type: "sent", name: "Sarah Johnson", amount: -150.00, date: "2025-10-15 at 14:30", status: "Completed" },
-    { id: 2, type: "received", name: "Add Funds", amount: 500.00, date: "2025-10-14 at 10:15", status: "Completed" },
-    { id: 3, type: "sent", name: "Michael Chen", amount: -75.00, date: "2025-10-13 at 16:45", status: "Completed" },
-    { id: 4, type: "sent", name: "Emily Davis", amount: -200.00, date: "2025-10-12 at 09:20", status: "Completed" },
-    { id: 5, type: "received", name: "Add Funds", amount: 300.00, date: "2025-10-11 at 11:00", status: "Completed" },
-    { id: 6, type: "sent", name: "David Wilson", amount: -125.00, date: "2025-10-10 at 15:30", status: "Completed" },
-    { id: 7, type: "received", name: "Add Funds", amount: 1000.00, date: "2025-10-09 at 08:45", status: "Completed" },
-    { id: 8, type: "sent", name: "Lisa Anderson", amount: -90.00, date: "2025-10-08 at 13:15", status: "Completed" },
-  ];
+  // Fetch wallet data on component mount
+  useEffect(() => {
+    const fetchWalletData = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch wallet data
+        const walletInfo = await walletAPI.getWallet(userId);
+        setWalletData(walletInfo);
+
+        // Fetch wallet balance
+        const balanceData = await walletAPI.getBalance(userId);
+        setBalance(balanceData.balance);
+
+        // Fetch transactions
+        const transactionsData = await walletAPI.getTransactions(userId);
+        setTransactions(transactionsData.transactions || []);
+        
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching wallet data:', err);
+        setError('Failed to load wallet data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWalletData();
+  }, [userId]);
+
+  // Calculate totals from real transactions
+  const totalSent = transactions
+    .filter(t => t.sender_wallet_id === walletData?.id)
+    .reduce((sum, t) => sum + parseFloat(t.amount), 0);
+  
+  const totalReceived = transactions
+    .filter(t => t.receiver_wallet_id === walletData?.id)
+    .reduce((sum, t) => sum + parseFloat(t.amount), 0);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(walletId);
@@ -33,12 +70,53 @@ export default function UserWallet() {
     setTimeout(() => setCopied(false), 1500);
   };
 
-  const filteredTransactions = transactions.filter(t => {
-    if (activeTab === "all") return true;
-    if (activeTab === "sent") return t.type === "sent";
-    if (activeTab === "received") return t.type === "received";
-    return true;
-  });
+  // Map backend transaction to frontend format
+  const formatTransaction = (t) => {
+    const isSent = t.sender_wallet_id === walletData?.id;
+    return {
+      id: t.id,
+      type: isSent ? "sent" : "received",
+      name: isSent ? `To User ${t.receiver_wallet_id}` : `From User ${t.sender_wallet_id}`,
+      amount: isSent ? -parseFloat(t.amount) : parseFloat(t.amount),
+      date: new Date(t.created_at).toLocaleDateString() + ' at ' + new Date(t.created_at).toLocaleTimeString(),
+      status: t.status.charAt(0).toUpperCase() + t.status.slice(1)
+    };
+  };
+
+  const filteredTransactions = transactions
+    .map(formatTransaction)
+    .filter(t => {
+      if (activeTab === "all") return true;
+      if (activeTab === "sent") return t.type === "sent";
+      if (activeTab === "received") return t.type === "received";
+      return true;
+    });
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-blue-600 flex items-center justify-center">
+        <div className="text-white text-xl">Loading wallet...</div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-blue-600 flex items-center justify-center">
+        <div className="text-white text-center">
+          <p className="text-xl mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="bg-white text-blue-600 px-6 py-2 rounded-lg"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-blue-600 flex flex-col">
@@ -60,7 +138,7 @@ export default function UserWallet() {
             <div>
               <p className="text-blue-200 text-sm mb-2">Available Balance</p>
               {showBalance ? (
-                <h2 className="text-4xl font-bold text-white">{balance}</h2>
+                <h2 className="text-4xl font-bold text-white">KES {balance.toFixed(2)}</h2>
               ) : (
                 <h2 className="text-4xl font-bold text-white tracking-wider">••••••</h2>
               )}
@@ -132,7 +210,7 @@ export default function UserWallet() {
         {/* Action Buttons */}
         <div className="flex gap-3 mb-6">
           <button
-            onClick={() => navigate("/user/add-funds")}
+            onClick={() => alert("Add funds feature - connect to backend API")}
             className="flex-1 bg-white rounded-2xl p-4 flex flex-col items-center justify-center gap-2 hover:bg-gray-50 transition shadow"
           >
             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -167,11 +245,11 @@ export default function UserWallet() {
         <div className="flex gap-3 mb-6">
           <div className="flex-1 bg-blue-500 rounded-2xl p-4">
             <p className="text-blue-100 text-sm mb-1">Total Sent</p>
-            <p className="text-white font-bold text-2xl">{totalSent}</p>
+            <p className="text-white font-bold text-2xl">KES {totalSent.toFixed(2)}</p>
           </div>
           <div className="flex-1 bg-blue-500 rounded-2xl p-4">
             <p className="text-blue-100 text-sm mb-1">Total Received</p>
-            <p className="text-white font-bold text-2xl">{totalReceived}</p>
+            <p className="text-white font-bold text-2xl">KES {totalReceived.toFixed(2)}</p>
           </div>
         </div>
 
@@ -211,34 +289,40 @@ export default function UserWallet() {
 
         {/* Transaction List */}
         <div className="space-y-3 pb-6">
-          {filteredTransactions.map((transaction) => (
-            <div
-              key={transaction.id}
-              className="bg-white rounded-2xl p-4 flex items-center gap-4 shadow-sm hover:shadow-md transition"
-            >
-              <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                transaction.type === "sent" ? "bg-red-100" : "bg-green-100"
-              }`}>
-                {transaction.type === "sent" ? (
-                  <Send size={20} className="text-red-600" />
-                ) : (
-                  <ArrowDownToLine size={20} className="text-green-600" />
-                )}
-              </div>
-              <div className="flex-1">
-                <p className="font-semibold text-gray-900">{transaction.name}</p>
-                <p className="text-sm text-gray-500">{transaction.date}</p>
-              </div>
-              <div className="text-right">
-                <p className={`font-bold text-lg ${
-                  transaction.type === "sent" ? "text-red-600" : "text-green-600"
+          {filteredTransactions.length > 0 ? (
+            filteredTransactions.map((transaction) => (
+              <div
+                key={transaction.id}
+                className="bg-white rounded-2xl p-4 flex items-center gap-4 shadow-sm hover:shadow-md transition"
+              >
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                  transaction.type === "sent" ? "bg-red-100" : "bg-green-100"
                 }`}>
-                  {transaction.type === "sent" ? "-" : "+"}${Math.abs(transaction.amount).toFixed(2)}
-                </p>
-                <p className="text-xs text-gray-500">{transaction.status}</p>
+                  {transaction.type === "sent" ? (
+                    <Send size={20} className="text-red-600" />
+                  ) : (
+                    <ArrowDownToLine size={20} className="text-green-600" />
+                  )}
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold text-gray-900">{transaction.name}</p>
+                  <p className="text-sm text-gray-500">{transaction.date}</p>
+                </div>
+                <div className="text-right">
+                  <p className={`font-bold text-lg ${
+                    transaction.type === "sent" ? "text-red-600" : "text-green-600"
+                  }`}>
+                    {transaction.type === "sent" ? "-" : "+"}KES {Math.abs(transaction.amount).toFixed(2)}
+                  </p>
+                  <p className="text-xs text-gray-500">{transaction.status}</p>
+                </div>
               </div>
+            ))
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500">No transactions yet</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>
